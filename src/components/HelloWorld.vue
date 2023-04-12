@@ -2,6 +2,7 @@
   <div class="hello">
     <button @click="skip">跳转</button>
     <button @click="getMenu">数据请求</button>
+    <div>测试提交</div>
   </div>
 </template>
 
