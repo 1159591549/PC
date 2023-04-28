@@ -1,16 +1,14 @@
 <template>
   <div>
-    <div>{{ msg }}</div>
-    <div v-for="item in menuList" :key="item.name">{{ item.component }}</div>
-    <div>-----------------个人信息-----------------------</div>
-    <div>男姓名：{{ man.name }};年龄：{{ man.age }}</div>
-    <div>女姓名：{{ woman.name }};年龄：{{ woman.age }}</div>
+    <button @click="addCount">同步修改{{ store.state.count }}</button>
+    <button @click="asyncAddCount">异步修改{{ store.state.count }}</button>
   </div>
 </template>
 
 <script>
 import { onMounted, toRefs, reactive } from 'vue';
 import { post, get } from '@/libs/api'
+import { useStore } from 'vuex';
 export default {
   name: "HelloWorld",
   setup() {
@@ -20,6 +18,12 @@ export default {
       man: {},
       woman: {}
     })
+    let store = useStore()
+    // 查询用户信息
+    async function queryInfo() {
+      let res = await get('/getUsers');
+      console.log(res);
+    }
     async function getMenu() {
       let { router } = await post('/getRouters');
       data.menuList = router;
@@ -30,15 +34,21 @@ export default {
     }
     // 测试post请求
     async function postRequest() {
-      data.woman = await post('/postRequest',  { name: '苏应梅', age: '26' })
+      data.woman = await post('/postRequest', { name: '苏应梅', age: '26' })
     }
     onMounted(() => {
-      getMenu();
-      getRequest();
-      postRequest()
-    });
+    })
+    function addCount() {
+      store.commit('addCount', 1)
+    }
+    function asyncAddCount() {
+      store.dispatch('asyncAddCount', 2)
+    }
     return {
-      ...toRefs(data)
+      ...toRefs(data),
+      store,
+      addCount,
+      asyncAddCount
     }
   }
 };
