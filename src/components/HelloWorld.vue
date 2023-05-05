@@ -1,7 +1,15 @@
 <template>
   <div>
-    <button @click="addCount">同步修改{{ store.state.count }}</button>
-    <button @click="asyncAddCount">异步修改{{ store.state.count }}</button>
+    <!-- <button @click="addCount">同步修改{{ store.state.count }}</button>
+    <button @click="asyncAddCount">异步修改{{ store.state.count }}</button> -->
+    <div>token:{{ store.state.token }}</div>
+    <button @click="login">登录</button>
+    <br>
+    <button @click="getRequest">信息查询</button>
+    <br>
+    <button @click="postRequest">post请求</button>
+    <br>
+    <button @click="getMenu">获取菜单</button>
   </div>
 </template>
 
@@ -9,6 +17,7 @@
 import { onMounted, toRefs, reactive } from 'vue';
 import { post, get } from '@/libs/api'
 import { useStore } from 'vuex';
+import { ElMessage } from 'element-plus'
 export default {
   name: "HelloWorld",
   setup() {
@@ -25,16 +34,19 @@ export default {
       console.log(res);
     }
     async function getMenu() {
-      let { router } = await post('/getRouters');
+      let { router } = await get('/api/getRouters');
       data.menuList = router;
     }
     // 测试get请求
     async function getRequest() {
-      data.man = await get('/getRequest', { name: '胡智尧', age: '26' })
+      let { code, msg } = await get('/api/getRequest', { username: 'huzhiyao', password: '123456' })
+      if (code === 10001) {
+        ElMessage.error(msg)
+      }
     }
     // 测试post请求
     async function postRequest() {
-      data.woman = await post('/postRequest', { name: '苏应梅', age: '26' })
+      data.woman = await post('/api/postRequest', { name: '苏应梅', age: '26' })
     }
     onMounted(() => {
     })
@@ -44,11 +56,25 @@ export default {
     function asyncAddCount() {
       store.dispatch('asyncAddCount', 2)
     }
+    async function login() {
+      let { code, data, msg } = await post('/common/login', { username: 'huzhiyao', password: '123456' })
+      if (code === 10000) {
+        sessionStorage.setItem('token', 'Bearer ' + data.token)
+        store.commit('setToken', 'Bearer ' + data.token)
+        ElMessage.success(msg)
+      } else {
+        ElMessage.error(msg)
+      }
+    }
     return {
       ...toRefs(data),
       store,
       addCount,
-      asyncAddCount
+      asyncAddCount,
+      login,
+      getRequest,
+      postRequest,
+      getMenu
     }
   }
 };

@@ -3,19 +3,19 @@ import { ElMessage } from 'element-plus'
 //带三方类库
 import qs from 'qs'
 // 配置不同环境下，调用不同接口
-switch (process.env.NODE_ENV) {
-    // 生产环境，部署到服务器上的环境
-    case 'production':
-        axios.defaults.baseURL = 'http://api.zhengqinan.cn';
-        break;
-    //设置测式环境的接口地址
-    case 'staging':
-        axios.defaults.baseURL = 'http://api.zhengqinantext.cn';
-        break;
-    //开发环境接口地址
-    default:
-        axios.defaults.baseURL = 'http://127.0.0.1'
-}
+// switch (process.env.NODE_ENV) {
+//     // 生产环境，部署到服务器上的环境
+//     case 'production':
+//         axios.defaults.baseURL = 'http://api.zhengqinan.cn';
+//         break;
+//     //设置测式环境的接口地址
+//     case 'staging':
+//         axios.defaults.baseURL = 'http://api.zhengqinantext.cn';
+//         break;
+//     //开发环境接口地址
+//     default:
+//         axios.defaults.baseURL = 'http://127.0.0.1:8020'
+// }
 /**
  * 设置超时时间和跨域是否允许携带凭证
  */
@@ -34,9 +34,10 @@ axios.defaults.transformRequest = data => qs.stringify(data)  //qs是第三方�
  * config :发起请求的请求配置项
  */
 axios.interceptors.request.use(config => {
-    // let token = localStorage.getItem('token')
-    let token = 'er4g445t45h6terb34g3ebrt45h6ntn4tnt'
-    token && (config.headers.Authoriztion = token)
+    if (!config.url.startsWith('/common')) {
+        let token = sessionStorage.getItem('token')
+        token && (config.headers.Authorization = token)
+    }
     return config
 }, error => {
     return Promise.reject(error)
