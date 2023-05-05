@@ -4,16 +4,19 @@ const router = createRouter({
     routes:[
         {
             path:'/',
-            name:'helloWorld',
-            component: () => import('@/components/HelloWorld.vue'),
+            name:'',
+            redirect:'/home'
         },
         {
-            path:'/one',
-            name:'one',
+            path:'/home',
+            name:'home',
             component: () => import('@/view/home/index.vue'),
-        }
+        },
+        {
+            path:'/login',
+            name:'login',
+            component: () => import('@/view/common/login.vue'),
+        },
     ]
-
-    
 })
 export default router;
