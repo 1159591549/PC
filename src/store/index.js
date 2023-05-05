@@ -22,6 +22,8 @@ export default createStore({
         }
     },
     getters: {
-
+        getToken(state){
+            return state.token || sessionStorage.getItem('token')
+        }
     }
 })

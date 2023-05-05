@@ -1,6 +1,8 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
-import store from '../store'; 
+import store from '../store';
+import router from '../router'
+
 //带三方类库
 import qs from 'qs'
 // 配置不同环境下，调用不同接口
@@ -54,6 +56,9 @@ axios.interceptors.response.use(response => {
     if (response.data.code === 10003) {
         sessionStorage.setItem('token', '')
         store.commit('setToken', '')
+        router.push({
+            name: 'login'
+        })
     }
     return response.data //将主体内容返回  axios.get().then(result=>{拿到的就是响应主体})
 }, error => {
