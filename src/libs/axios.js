@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { ElMessage } from 'element-plus'
+import store from '../store'; 
 //带三方类库
 import qs from 'qs'
 // 配置不同环境下，调用不同接口
@@ -49,8 +50,14 @@ axios.interceptors.request.use(config => {
  * data：相应数据,status:响应状态码,statusText：响应状态信息,headers：响应头,config：响应提供的配置信息,request
  */
 axios.interceptors.response.use(response => {
+    // 接口正常问题
+    if (response.data.code === 10003) {
+        sessionStorage.setItem('token', '')
+        store.commit('setToken', '')
+    }
     return response.data //将主体内容返回  axios.get().then(result=>{拿到的就是响应主体})
 }, error => {
+    // 接口报错异常问题
     let { request } = error
     // 如果有返回结果
     if (request) {
