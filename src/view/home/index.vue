@@ -18,10 +18,6 @@ export default {
   name: "HelloWorld",
   setup() {
     let data = reactive({
-      msg: '这是自定义数据',
-      menusList: [],
-      man: {},
-      woman: {}
     })
     let store = useStore()
     async function getMenu() {
@@ -53,17 +49,9 @@ export default {
     }
     onMounted(() => {
     })
-    function addCount() {
-      store.commit('addCount', 1)
-    }
-    function asyncAddCount() {
-      store.dispatch('asyncAddCount', 2)
-    }
     return {
       ...toRefs(data),
       store,
-      addCount,
-      asyncAddCount,
       getRequest,
       postRequest,
       getMenu

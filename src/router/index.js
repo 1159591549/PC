@@ -30,10 +30,10 @@ router.beforeEach((to, from, next) => {
             if (store.state.loginState) {
                 next()
             } else {
-                let menu = JSON.parse(sessionStorage.getItem('menusList')) 
-                if (menu) {  
+                let menu = JSON.parse(sessionStorage.getItem('menusList'))
+                if (menu) {
                     urlToComponent(menu)
-                    menu.forEach((rt) => {  
+                    menu.forEach((rt) => {
                         router.addRoute(rt)
                     })
                     store.commit('setMenus', menu)
@@ -42,36 +42,28 @@ router.beforeEach((to, from, next) => {
                 } else {
                     // 不存在菜单 退回login
                     window.sessionStorage.clear()
-                    router.push({ path: '/login' })
+                    next({
+                        name: 'login'
+                    })
                 }
             }
-        // 未登录
+            // 未登录
         } else {
             window.sessionStorage.clear()
-            router.push({ path: '/login' })
+            next({
+                name: 'login'
+            })
         }
-    // 登录页面
-    } else {  
-        next()
+        // 登录页面
+    } else {
+        if (sessionStorage.getItem('token') && sessionStorage.getItem('menusList')) {
+            // 这个地方当刷新页面的时候，from.name是undefined,要用from.path进行跳转
+            next({
+                path: from.path
+            })
+        } else {
+            next()
+        }
     }
-    // if (to.name === 'login') {
-    //     // 当要跳转到登录页面时，有token且未过期，禁止页面跳转到登录页面
-    //     if (store.getters.getToken) {
-    //         next({
-    //             name: from.name
-    //         })
-    //     } else {
-    //         next()
-    //     }
-    // } else {
-    //     // 当要跳转非登录页面时 有token且未过期，页面正常跳转
-    //     if (store.getters.getToken) {
-    //         next()
-    //     } else {
-    //         next({
-    //             name: 'login'
-    //         })
-    //     }
-    // }
 })
 export default router;

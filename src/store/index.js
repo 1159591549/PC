@@ -30,20 +30,17 @@ export default createStore({
             let { username, password } = payload
             let { code, data, msg } = await post(common + '/login', { username, password })
             if (code === 10000) {
+                // 传递给后端的token要将 Bearer token拼起来传递给后端
+                // 注意：中间要有空格不然后端无法识别，切记！！！
                 sessionStorage.setItem('token', 'Bearer ' + data.token)
-                commit('setLoginState', true)
                 commit('setToken', 'Bearer ' + data.token)
+                commit('setLoginState', true)
+                // 根据权限获取页面路由
                 dispatch('getRouters')
                 ElMessage.success(msg)
             } else {
                 ElMessage.error(msg)
             }
-        },
-        asyncAddCount(state, payload) {
-            let timer = setTimeout(() => {
-                state.commit('addCount', payload)
-                clearTimeout(timer)
-            }, 1000)
         },
         async getRouters(state, payload) {
             let { code, data, msg } = await get(api + '/getRouters')
