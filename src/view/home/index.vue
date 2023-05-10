@@ -19,7 +19,7 @@ export default {
   setup() {
     let data = reactive({
       msg: '这是自定义数据',
-      menuList: [],
+      menusList: [],
       man: {},
       woman: {}
     })
