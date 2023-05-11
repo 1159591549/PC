@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import store from "../store";
+import Main from '../components/main'
 const router = createRouter({
     history: createWebHistory(),
     routes: [
@@ -10,13 +11,17 @@ const router = createRouter({
         },
     ]
 })
+
+// 路径映射到组件
 export const urlToComponent = (menu = []) => {
     menu.forEach(item => {
-        if (!item.children || (item.children && item.children.length === 0)) {
-            if (item.file) {
-                item.component = () => import(`@/view${item.file}`)
-            }
+        // 一级组件的时候需要使用main容器，其余组件则使用自身的路径
+        if (item.meta && item.meta.component) {
+            item.component = () => import(`@/view${item.meta.component}`)
         } else {
+            item.component = Main
+        }
+        if (item.children && item.children.length > 0) {
             urlToComponent(item.children)
         }
     })

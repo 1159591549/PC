@@ -5,6 +5,8 @@
     <button @click="postRequest">post请求</button>
     <br>
     <button @click="getMenu">获取菜单</button>
+    <br>
+    <button @click="toPermission">to permission</button>
   </div>
 </template>
   
@@ -14,12 +16,14 @@ import { post, get } from '@/libs/request'
 import { api } from '@/libs/api'
 import { useStore } from 'vuex';
 import { ElMessage } from 'element-plus'
+import { useRouter } from 'vue-router'
 export default {
   name: "HelloWorld",
   setup() {
     let data = reactive({
     })
     let store = useStore()
+    let router = useRouter()
     async function getMenu() {
       let { code, data, msg } = await get(api + '/getRouters');
       if (code === 10000) {
@@ -47,6 +51,11 @@ export default {
         ElMessage.error(msg)
       }
     }
+    function toPermission() {
+      router.push({
+        name: 'permission'
+      })
+    }
     onMounted(() => {
     })
     return {
@@ -54,7 +63,8 @@ export default {
       store,
       getRequest,
       postRequest,
-      getMenu
+      getMenu,
+      toPermission
     }
   }
 };
