@@ -1,5 +1,4 @@
 <template>
-    <div>permission</div>
     <button @click="toHome">to home</button>
 </template>
 <script>

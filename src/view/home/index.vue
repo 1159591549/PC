@@ -1,11 +1,11 @@
 <template>
   <div>
-    <button @click="getRequest">get请求</button>
+    <!-- <button @click="getRequest">get请求</button>
     <br>
     <button @click="postRequest">post请求</button>
     <br>
     <button @click="getMenu">获取菜单</button>
-    <br>
+    <br> -->
     <button @click="toPermission">to permission</button>
   </div>
 </template>
@@ -64,7 +64,8 @@ export default {
       getRequest,
       postRequest,
       getMenu,
-      toPermission
+      toPermission,
+      token: store.getters.getToken
     }
   }
 };

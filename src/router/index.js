@@ -1,8 +1,8 @@
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import store from "../store";
 import Main from '../components/main'
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHashHistory(),
     routes: [
         {
             path: '/login',

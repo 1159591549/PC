@@ -62,6 +62,9 @@ export default createStore({
     getters: {
         getToken(state) {
             return state.token || sessionStorage.getItem('token')
+        },
+        menusList(state){
+            return state.menusList || JSON.parse(sessionStorage.getItem('menusList')) 
         }
     }
 })
